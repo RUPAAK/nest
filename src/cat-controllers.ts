@@ -3,30 +3,41 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Req,
+  Res,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+import { Cat } from './car-interface';
+import { CatsService } from './cats-service';
 import { CreateCatDto } from './create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catService: CatsService) {}
+
   @Get()
-  findAll(@Req() req: Request): string {
-    return 'This is a cat string';
+  async findAll(@Req() req: Request): Promise<Cat[]> {
+    return this.catService.findAll();
   }
 
   @Get(':id')
   findOne(@Req() req: Request, @Param() params): string {
-    console.log(params);
     return 'This is a cat string';
   }
 
+  //passthrough true to use native response object and have the rest of nest frameork.
   @Post()
-  async create(@Body() createCatDto: CreateCatDto): Promise<string> {
-    return 'This is Post String';
+  async create(
+    @Body() createCatDto: CreateCatDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    // res.status(HttpStatus.CREATED).json([]);
+    this.catService.create(createCatDto);
   }
 
   @Patch()
