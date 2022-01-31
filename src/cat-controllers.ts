@@ -12,7 +12,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Cat } from './car-interface';
+import { Cat } from './cat-interface';
 import { CatsService } from './cats-service';
 import { CreateCatDto } from './create-cat.dto';
 
